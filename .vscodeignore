@@ -9,4 +9,5 @@ src/**
 **/*.ts
 *.vsix
 **/.prettierrc.json
-.gitattributes
+.gitattributes**/__pycache__/**
+**/*.pyc
