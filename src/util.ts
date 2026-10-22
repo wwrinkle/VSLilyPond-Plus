@@ -157,3 +157,30 @@ export const errMsgRegex = new RegExp(
   ].join(``),
   `gm`
 )
+
+// expand ${workspaceFolder} (the folder containing `doc`) in a setting value
+const expandVariables = (value: string, doc: vscode.TextDocument): string => {
+  const folder = vscode.workspace.getWorkspaceFolder(doc.uri)?.uri.fsPath
+  return folder ? value.replace(/\$\{workspaceFolder\}/g, folder) : value
+}
+
+// extra `lilypond` arguments from settings: additionalCommandLineArguments
+// plus one `-I` per entry in compilation.includePaths
+export const getExtraLilypondArgs = (doc: vscode.TextDocument): string[] => {
+  const config = getConfiguration(doc)
+  const additional: string[] = (
+    config.compilation.additionalCommandLineArguments ?? ``
+  )
+    .trim()
+    .split(/\s+/)
+    .filter((x: string) => x.length > 0)
+  const includePaths: string[] = config.compilation.includePaths ?? []
+  const includeArgs = includePaths
+    .filter((p) => typeof p === `string` && p.trim().length > 0)
+    .reduce(
+      (args: string[], p) =>
+        args.concat([`-I`, expandVariables(p.trim(), doc)]),
+      []
+    )
+  return additional.concat(includeArgs)
+}

@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.10.0
+- MIDI input monitor: hear what you enter through a synth while MIDI input is running
+  (`vslilypondPlus.midiInput.monitor`, `monitorOutput`, `monitorSynthCommand`). Optionally starts
+  a synth such as FluidSynth when input starts and stops it when input stops.
+- Add `vslilypondPlus.compilation.includePaths`: extra LilyPond search folders (passed as `-I`, `${workspaceFolder}` supported),
+  used when compiling and in the as-you-type check
+- Toggle sharps/flats saves to wherever `midiInput.accidentals` is already set (user settings by default)
+
 ## 1.9.0
 - MIDI input note names are now a setting: `vslilypondPlus.midiInput.noteNames` (`dutch` by default, or `english`)
 

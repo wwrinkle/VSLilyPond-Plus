@@ -5,8 +5,8 @@ import {
   logger,
   getBinPath,
   LogLevel,
-  getConfiguration,
   errMsgRegex,
+  getExtraLilypondArgs,
 } from "./util"
 import { langId } from "./consts"
 import * as fs from "fs"
@@ -155,11 +155,9 @@ const execIntellisense = async (
   try {
     diagCol.clear()
 
-    const config = getConfiguration(doc)
     const binPath = getBinPath()
 
-    const additionalArgs: string[] =
-      config.compilation.additionalCommandLineArguments.trim().split(/\s+/)
+    const additionalArgs: string[] = getExtraLilypondArgs(doc)
 
     // notice that this produces a midi file titled `-.mid`.
     // it is possible to set output to filePath, but then the --include gets broken...

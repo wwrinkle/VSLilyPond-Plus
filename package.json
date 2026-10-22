@@ -5,7 +5,7 @@
   "license": "SEE LICENSE IN README.md",
   "repository": "https://github.com/wwrinkle/VSLilyPond-Plus",
   "description": "Fork of VSLilyPond: syntax and error highlighting, compilation on save, format on save (bundled python-ly), MIDI input (Dutch or English note names) and playback for LilyPond in VSCode.",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.46.0"
@@ -180,6 +180,16 @@
           "description": "Additional command line arguments supplied to `lilypond` upon compilation. Note that `--loglevel=WARNING` is predefined. Intellisense also uses these arguments.",
           "scope": "resource"
         },
+        "vslilypondPlus.compilation.includePaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "group": "Compilation",
+          "description": "Extra folders for LilyPond's search path, passed as `-I <folder>` when compiling and checking for errors. Use this for include files or music fonts kept in the project. `${workspaceFolder}` is replaced with the project folder.",
+          "scope": "resource"
+        },
         "vslilypondPlus.compilation.pathToMainCompilationFile": {
           "type": "string",
           "default": "",
@@ -243,6 +253,27 @@
           ],
           "group": "MIDI Input",
           "description": "Note-name language used when MIDI input types notes.",
+          "scope": "resource"
+        },
+        "vslilypondPlus.midiInput.monitor": {
+          "type": "boolean",
+          "default": false,
+          "group": "MIDI Input",
+          "description": "Play the notes you enter through a synth while MIDI input is running. Uses `vslilypondPlus.midiInput.monitorOutput`, then `vslilypondPlus.midiPlayback.output`, and otherwise the first FluidSynth or TiMidity port found.",
+          "scope": "resource"
+        },
+        "vslilypondPlus.midiInput.monitorOutput": {
+          "type": "string",
+          "default": "",
+          "group": "MIDI Input",
+          "description": "MIDI output device that MIDI input is played through when `vslilypondPlus.midiInput.monitor` is on. Matches the exact device name, or any device whose name contains this text (e.g. `Synth input port` for FluidSynth). If empty, `vslilypondPlus.midiPlayback.output` is used.",
+          "scope": "resource"
+        },
+        "vslilypondPlus.midiInput.monitorSynthCommand": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Shell command that starts a synth when `#vslilypondPlus.midiInput.monitor#` is on and no matching output is running. The synth is stopped when MIDI input stops. Example: `fluidsynth -is -a pulseaudio -m alsa_seq -z 64 -c 2 /usr/share/sounds/sf2/FluidR3_GM.sf2` (`-is` keeps FluidSynth running without a console).",
+          "group": "MIDI Input",
           "scope": "resource"
         },
         "vslilypondPlus.formatting.formatOnSave": {

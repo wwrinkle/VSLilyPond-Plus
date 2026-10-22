@@ -6,6 +6,7 @@ import {
   getBinPath,
   getConfiguration,
   errMsgRegex,
+  getExtraLilypondArgs,
 } from "./util"
 import { langId } from "./consts"
 import * as path from "path"
@@ -158,9 +159,7 @@ export const compile = async (
 
     const filePath = getCompilationFilePath(compileMode, activeTextDocument)
 
-    const config = getConfiguration(activeTextDocument)
-    const additionalArgs: string[] =
-      config.compilation.additionalCommandLineArguments.trim().split(/\s+/)
+    const additionalArgs: string[] = getExtraLilypondArgs(activeTextDocument)
 
     const args = [`--loglevel=WARNING`].concat(additionalArgs).concat(filePath)
 

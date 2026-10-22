@@ -213,10 +213,21 @@ export function activate(context: vscode.ExtensionContext) {
       if (e.affectsConfiguration("vslilypondPlus.midiInput")) {
         MIDIIn.updateMIDIStatusBarItem()
       }
+      // apply MIDI monitor changes to running input
+      const monitorChanged = [
+        "midiInput.monitor",
+        "midiInput.monitorOutput",
+        "midiInput.monitorSynthCommand",
+      ].some((s) => e.affectsConfiguration(`vslilypondPlus.${s}`))
+      if (monitorChanged && MIDIIn.isActive()) {
+        MIDIIn.stopMIDIInput().then(() => MIDIIn.startMIDIInput())
+      }
     })
   )
 }
 
 // this method is called when your extension is deactivated
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export function deactivate() {}
+export function deactivate() {
+  // stop a synth the MIDI monitor started
+  MIDIIn.stopMIDIInput()
+}

@@ -11,6 +11,7 @@ import * as JZZ from "jzz"
 // @ts-ignore
 import * as jzzMidiSmf from "jzz-midi-smf"
 import { langId } from "./consts"
+import { MIDIMonitor } from "./midi-monitor"
 jzzMidiSmf(JZZ)
 export namespace MIDIIn {
   type MIDIInStateType = {
@@ -289,20 +290,25 @@ export namespace MIDIIn {
       logger(String(err), LogLevel.error, false)
     }
     updateMIDIStatusBarItem()
+    if (MIDIInState.active) {
+      // play what is being entered through a synth, if enabled
+      await MIDIMonitor.start(MIDIInState.midiInPort)
+    }
   }
 
-  export const stopMIDIInput = async () => {
+  // `keepSynth` keeps a synth started by the monitor running across a restart
+  export const stopMIDIInput = async (keepSynth = false) => {
+    MIDIMonitor.stop(keepSynth)
     if (MIDIInState.midiInPort) {
       MIDIInState.midiInPort.disconnect()
       MIDIInState.midiInPort.close()
     }
-    MIDIInState = initialMidiInState
-    MIDIInState.active = false
+    MIDIInState = { ...initialMidiInState }
     updateMIDIStatusBarItem()
   }
 
   export const restartMIDIInput = async () => {
-    await stopMIDIInput()
+    await stopMIDIInput(true)
     await startMIDIInput()
   }
 
@@ -321,9 +327,15 @@ export namespace MIDIIn {
     const config = getConfiguration()
     const next: Accidentals =
       config.midiInput.accidentals === `flats` ? `sharps` : `flats`
-    const target = vscode.workspace.workspaceFolders
-      ? vscode.ConfigurationTarget.Workspace
-      : vscode.ConfigurationTarget.Global
+    // save where the setting already lives; otherwise in user settings,
+    // so toggling doesn't edit a project's .vscode/settings.json
+    const where = config.inspect(`midiInput.accidentals`)
+    const target =
+      where?.workspaceFolderValue !== undefined
+        ? vscode.ConfigurationTarget.WorkspaceFolder
+        : where?.workspaceValue !== undefined
+        ? vscode.ConfigurationTarget.Workspace
+        : vscode.ConfigurationTarget.Global
     await config.update(`midiInput.accidentals`, next, target)
     if (MIDIInState.active) {
       await restartMIDIInput()

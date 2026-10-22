@@ -11,6 +11,11 @@ A fork of [VSLilyPond](https://github.com/lhl2617/VSLilyPond) by [lhl2617](https
 - **Toggle sharps/flats** with `Ctrl+Alt+A` or by clicking the new ♭/♯ status bar item. MIDI input
   restarts automatically so the change applies to the next note.
 - **Start/stop MIDI input** with `Ctrl+Alt+R`.
+- **Hear what you enter.** With `"vslilypondPlus.midiInput.monitor": true`, notes played during MIDI
+  input are also sent to a synth (FluidSynth/TiMidity found automatically, or set
+  `vslilypondPlus.midiInput.monitorOutput`). Only while input is running. To have the extension
+  start and stop the synth itself, set `vslilypondPlus.midiInput.monitorSynthCommand`, e.g.
+  `fluidsynth -is -a pulseaudio -m alsa_seq -z 64 -c 2 /usr/share/sounds/sf2/FluidR3_GM.sf2`.
 - **No stray `-.pdf` files.** The as-you-type error check no longer writes a PDF with LilyPond 2.26.
 
 Commands and settings use the `vslilypondPlus.` prefix (instead of `vslilypond.`), so this fork and
