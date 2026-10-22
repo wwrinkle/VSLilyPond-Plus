@@ -166,6 +166,7 @@ const execIntellisense = async (
     const intellisenseArgs = [
       `--loglevel=WARNING`, // Output errors and warnings
       `--define-default=backend=null`, // to not output printed score
+      `-dno-print-pages`, // LilyPond 2.26 still writes -.pdf with backend=null alone
       `-dmidi-extension=tmp`, // show midi output as -.tmp
       `-`, // read input from stdin
     ]

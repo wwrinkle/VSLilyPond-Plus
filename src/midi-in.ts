@@ -61,6 +61,7 @@ export namespace MIDIIn {
   }
 
   // maps midi numbers from 0-11 to the name based on the sharps/flat mode
+  // (English note names, for files using \language "english")
   export const getNoteChar = (
     accidentals: Accidentals,
     noteNum: number
@@ -68,16 +69,16 @@ export namespace MIDIIn {
     const isSharp = accidentals === `sharps`
     const map: Record<number, string> = {
       0: `c`,
-      1: isSharp ? `cis` : `des`,
+      1: isSharp ? `cs` : `df`,
       2: `d`,
-      3: isSharp ? `dis` : `ees`,
+      3: isSharp ? `ds` : `ef`,
       4: `e`,
       5: `f`,
-      6: isSharp ? `fis` : `ges`,
+      6: isSharp ? `fs` : `gf`,
       7: `g`,
-      8: isSharp ? `gis` : `aes`,
+      8: isSharp ? `gs` : `af`,
       9: `a`,
-      10: isSharp ? `ais` : `bes`,
+      10: isSharp ? `as` : `bf`,
       11: `b`,
     }
 
@@ -280,6 +281,32 @@ export namespace MIDIIn {
     await startMIDIInput()
   }
 
+  export const isActive = (): boolean => MIDIInState.active
+
+  export const toggleMIDIInput = async () => {
+    if (MIDIInState.active) {
+      await stopMIDIInput()
+    } else {
+      await startMIDIInput()
+    }
+  }
+
+  // switch between sharps and flats; restarts input so the change applies now
+  export const toggleAccidentals = async () => {
+    const config = getConfiguration()
+    const next: Accidentals =
+      config.midiInput.accidentals === `flats` ? `sharps` : `flats`
+    const target = vscode.workspace.workspaceFolders
+      ? vscode.ConfigurationTarget.Workspace
+      : vscode.ConfigurationTarget.Global
+    await config.update(`midiInput.accidentals`, next, target)
+    if (MIDIInState.active) {
+      await restartMIDIInput()
+    }
+    updateMIDIStatusBarItem()
+    vscode.window.setStatusBarMessage(`Accidentals: ${next}`, 3000)
+  }
+
   const getInputMIDIDevices = async () => {
     const inputs: string[] = JZZ()
       .info()
@@ -309,7 +336,7 @@ export namespace MIDIIn {
         vscode.StatusBarAlignment.Right,
         2
       )
-      startBtn.command = `vslilypond.startMIDIInput`
+      startBtn.command = `vslilypondPlus.startMIDIInput`
       startBtn.text = `$(circle-filled) Start MIDI Input`
       startBtn.tooltip = `Start MIDI Input`
       statusBarItems.start = startBtn
@@ -319,10 +346,19 @@ export namespace MIDIIn {
         vscode.StatusBarAlignment.Right,
         1
       )
-      stopBtn.command = `vslilypond.stopMIDIInput`
+      stopBtn.command = `vslilypondPlus.stopMIDIInput`
       stopBtn.text = `$(debug-stop) Stop MIDI Input`
       stopBtn.tooltip = `Stop MIDI Input`
       statusBarItems.stop = stopBtn
+    }
+    {
+      const accidentalsBtn = vscode.window.createStatusBarItem(
+        vscode.StatusBarAlignment.Right,
+        0
+      )
+      accidentalsBtn.command = `vslilypondPlus.toggleMIDIInputAccidentals`
+      accidentalsBtn.tooltip = `MIDI input accidentals (click or Ctrl+Alt+A to toggle)`
+      statusBarItems.accidentals = accidentalsBtn
     }
     updateMIDIStatusBarItem()
   }
@@ -338,6 +374,9 @@ export namespace MIDIIn {
   // update status bar item for midi playback
   export const updateMIDIStatusBarItem = async () => {
     if (shouldShowStatusBarItems()) {
+      statusBarItems.accidentals.text =
+        getMIDIInputConfig().accidentals === `flats` ? `♭ Flats` : `♯ Sharps`
+      statusBarItems.accidentals.show()
       if (MIDIInState.active) {
         statusBarItems.start.hide()
         statusBarItems.stop.show()

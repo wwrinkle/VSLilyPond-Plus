@@ -10,6 +10,7 @@ import { subscribeIntellisense } from "./intellisense"
 import { MIDIOut } from "./midi-out"
 import { MIDIIn } from "./midi-in"
 import { langId } from "./consts"
+import { subscribeFormatOnSave } from "./format"
 
 export function activate(context: vscode.ExtensionContext) {
   // need to make sure `lilypond` exists
@@ -29,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // compile main file if exists, else compiles active file
   const compileCmd = vscode.commands.registerCommand(
-    "vslilypond.compile",
+    "vslilypondPlus.compile",
     () => {
       compile()
     }
@@ -38,7 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // compile to pdf
   const compileThisSpecificFileCmd = vscode.commands.registerCommand(
-    "vslilypond.compileThisSpecificFile",
+    "vslilypondPlus.compileThisSpecificFile",
     () => {
       compile(CompileMode.onCompileSpecific)
     }
@@ -46,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(compileThisSpecificFileCmd)
 
   const killCompilationCmd = vscode.commands.registerCommand(
-    "vslilypond.killCompilationProcess",
+    "vslilypondPlus.killCompilationProcess",
     () => {
       killCompilation(false)
     }
@@ -62,6 +63,10 @@ export function activate(context: vscode.ExtensionContext) {
     })
   }
 
+  // ===== ===== ===== FORMATTING ===== ===== =====
+  // format with python-ly before saving (checks its setting on every save)
+  subscribeFormatOnSave(context)
+
   // ===== ===== ===== INTELLISENSE ===== ===== =====
   // intellisense
   if (config.intellisense.enabled) {
@@ -72,7 +77,7 @@ export function activate(context: vscode.ExtensionContext) {
   // ===== ===== ===== MIDI PLAYBACK ===== ===== =====
   // play midi
   const playMidiCmd = vscode.commands.registerCommand(
-    "vslilypond.playMIDI",
+    "vslilypondPlus.playMIDI",
     () => {
       MIDIOut.playMIDI()
     }
@@ -81,7 +86,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // play midi from
   const playMidiFromCmd = vscode.commands.registerCommand(
-    "vslilypond.playMIDIFrom",
+    "vslilypondPlus.playMIDIFrom",
     () => {
       MIDIOut.playMIDIFrom()
     }
@@ -90,7 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // stop midi
   const stopMidiCmd = vscode.commands.registerCommand(
-    "vslilypond.stopMIDI",
+    "vslilypondPlus.stopMIDI",
     () => {
       MIDIOut.stopMIDI()
     }
@@ -99,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // pause midi
   const pauseMidiCmd = vscode.commands.registerCommand(
-    "vslilypond.pauseMIDI",
+    "vslilypondPlus.pauseMIDI",
     () => {
       MIDIOut.pauseMIDI()
     }
@@ -108,7 +113,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // resume midi
   const resumeMidiCmd = vscode.commands.registerCommand(
-    "vslilypond.resumeMIDI",
+    "vslilypondPlus.resumeMIDI",
     () => {
       MIDIOut.resumeMIDI()
     }
@@ -117,7 +122,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // reset midi
   const resetMIDIOutputCmd = vscode.commands.registerCommand(
-    "vslilypond.resetMIDIOutput",
+    "vslilypondPlus.resetMIDIOutput",
     () => {
       MIDIOut.resetMIDI()
     }
@@ -126,7 +131,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // set midi output device
   const setOutputMidiDeviceCmd = vscode.commands.registerCommand(
-    "vslilypond.setOutputMIDIDevice",
+    "vslilypondPlus.setOutputMIDIDevice",
     () => {
       MIDIOut.setOutputMIDIDevice()
     }
@@ -139,7 +144,7 @@ export function activate(context: vscode.ExtensionContext) {
   // ===== ===== ===== MIDI INPUT ===== ===== =====
   // start midi input
   const startInputMidiCmd = vscode.commands.registerCommand(
-    "vslilypond.startMIDIInput",
+    "vslilypondPlus.startMIDIInput",
     () => {
       MIDIIn.startMIDIInput()
     }
@@ -148,7 +153,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // stop midi input
   const stopInputMidiCmd = vscode.commands.registerCommand(
-    "vslilypond.stopMIDIInput",
+    "vslilypondPlus.stopMIDIInput",
     () => {
       MIDIIn.stopMIDIInput()
     }
@@ -157,7 +162,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // set midi input device
   const setInputMidiDeviceCmd = vscode.commands.registerCommand(
-    "vslilypond.setInputMIDIDevice",
+    "vslilypondPlus.setInputMIDIDevice",
     () => {
       MIDIIn.setInputMIDIDevice()
     }
@@ -166,14 +171,32 @@ export function activate(context: vscode.ExtensionContext) {
 
   // restart midi input
   const restartMIDIInputCmd = vscode.commands.registerCommand(
-    "vslilypond.restartMIDIInput",
+    "vslilypondPlus.restartMIDIInput",
     () => {
       MIDIIn.restartMIDIInput()
     }
   )
   context.subscriptions.push(restartMIDIInputCmd)
 
-  // status bar items for MIDI playback
+  // start/stop midi input with one command
+  const toggleMIDIInputCmd = vscode.commands.registerCommand(
+    "vslilypondPlus.toggleMIDIInput",
+    () => {
+      MIDIIn.toggleMIDIInput()
+    }
+  )
+  context.subscriptions.push(toggleMIDIInputCmd)
+
+  // switch midi input between sharps and flats
+  const toggleAccidentalsCmd = vscode.commands.registerCommand(
+    "vslilypondPlus.toggleMIDIInputAccidentals",
+    () => {
+      MIDIIn.toggleAccidentals()
+    }
+  )
+  context.subscriptions.push(toggleAccidentalsCmd)
+
+  // status bar items for MIDI input
   MIDIIn.initMIDIStatusBarItems()
 
   // ===== ===== ===== LISTENERS ===== ===== =====
@@ -183,6 +206,15 @@ export function activate(context: vscode.ExtensionContext) {
     MIDIIn.updateMIDIStatusBarItem()
     MIDIOut.updateMIDIStatusBarItem()
   })
+
+  // keep the accidentals indicator in sync with settings edits
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration("vslilypondPlus.midiInput")) {
+        MIDIIn.updateMIDIStatusBarItem()
+      }
+    })
+  )
 }
 
 // this method is called when your extension is deactivated

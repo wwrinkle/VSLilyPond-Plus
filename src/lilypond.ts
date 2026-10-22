@@ -13,7 +13,7 @@ import * as fs from "fs"
 
 export enum CompileMode {
   onSave, // compile on save
-  onCompile, // compile on command (vslilypond.compile)
+  onCompile, // compile on command (vslilypondPlus.compile)
   onCompileSpecific, // compile on command to compile specific file
 }
 

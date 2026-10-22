@@ -331,7 +331,7 @@ export namespace MIDIOut {
         vscode.StatusBarAlignment.Left,
         100
       )
-      playBtn.command = `vslilypond.resumeMIDI`
+      playBtn.command = `vslilypondPlus.resumeMIDI`
       playBtn.text = `$(debug-start) Play MIDI`
       playBtn.tooltip = `Play MIDI output file (Resumes if paused)`
       statusBarItems.play = playBtn
@@ -341,7 +341,7 @@ export namespace MIDIOut {
         vscode.StatusBarAlignment.Left,
         99
       )
-      playFromBtn.command = `vslilypond.playMIDIFrom`
+      playFromBtn.command = `vslilypondPlus.playMIDIFrom`
       playFromBtn.text = `$(debug-continue) Play MIDI From...`
       playFromBtn.tooltip = `Play MIDI output file from a certain timesatmp`
       statusBarItems.playFrom = playFromBtn
@@ -351,7 +351,7 @@ export namespace MIDIOut {
         vscode.StatusBarAlignment.Left,
         98
       )
-      pauseBtn.command = `vslilypond.pauseMIDI`
+      pauseBtn.command = `vslilypondPlus.pauseMIDI`
       pauseBtn.text = `$(debug-pause) Pause MIDI`
       pauseBtn.tooltip = `Pause MIDI playback`
       statusBarItems.pause = pauseBtn
@@ -361,7 +361,7 @@ export namespace MIDIOut {
         vscode.StatusBarAlignment.Left,
         97
       )
-      stopBtn.command = `vslilypond.stopMIDI`
+      stopBtn.command = `vslilypondPlus.stopMIDI`
       stopBtn.text = `$(debug-stop) Stop MIDI`
       stopBtn.tooltip = `Stop MIDI playback`
       statusBarItems.stop = stopBtn

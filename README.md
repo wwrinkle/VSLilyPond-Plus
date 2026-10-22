@@ -1,8 +1,34 @@
-# VSLilyPond
+# VSLilyPond Plus
 
-[![Visual Studio Marketplace](https://vsmarketplacebadge.apphb.com/version-short/lhl2617.vslilypond.svg)](https://marketplace.visualstudio.com/items?itemName=lhl2617.vslilypond)
-[![Visual Studio Marketplace](https://vsmarketplacebadge.apphb.com/installs/lhl2617.vslilypond.svg)](https://vsmarketplacebadge.apphb.com/installs/lhl2617.vslilypond.svg)
-[![Visual Studio Marketplace](https://vsmarketplacebadge.apphb.com/rating-star/lhl2617.vslilypond.svg)](https://marketplace.visualstudio.com/items?itemName=lhl2617.vslilypond)
+A fork of [VSLilyPond](https://github.com/lhl2617/VSLilyPond) by [lhl2617](https://github.com/lhl2617)
+(last released as 1.7.3), with these changes:
+
+- **Format on save, built in.** The editor's current text is reformatted with python-ly before it is
+  saved, so unsaved edits are never lost. python-ly is bundled (needs only `python3`); the separate
+  LilyPond Formatter extension is no longer required.
+- **English note names for MIDI input** (`cs`, `bf`, ...) for files using `\language "english"`.
+- **Toggle sharps/flats** with `Ctrl+Alt+A` or by clicking the new ♭/♯ status bar item. MIDI input
+  restarts automatically so the change applies to the next note.
+- **Start/stop MIDI input** with `Ctrl+Alt+R`.
+- **No stray `-.pdf` files.** The as-you-type error check no longer writes a PDF with LilyPond 2.26.
+
+Commands and settings use the `vslilypondPlus.` prefix (instead of `vslilypond.`), so this fork and
+the original never clash.
+
+### Install
+
+Download the `.vsix` from the [latest release](https://github.com/wwrinkle/VSLilyPond-Plus/releases/latest), then:
+
+```
+code --install-extension vslilypond-plus-<version>.vsix
+```
+
+Uninstall the original VSLilyPond (`lhl2617.vslilypond`) first. To build it yourself:
+`npm ci --legacy-peer-deps && npx vsce package`.
+
+---
+
+*Original README follows.*
 
 Provides syntax and error highlighting, IntelliSense and AutoComplete, compilation on save, MIDI (input and playback) support for [LilyPond](http://lilypond.org/) in VSCode. Works with any VSCode supported PDF previewer for PDF preview.
 
@@ -105,3 +131,7 @@ Point and Click depends on the [LilyPond PDF Preview extension](https://marketpl
 under the [MIT license](https://github.com/lhl2617/VSLilyPond-PDF-preview/blob/master/LICENSE).
 
 License: Creative Commons Attribution-NonCommercial 3.0 Unported (CC BY-NC 3.0) license, http://creativecommons.org/licenses/by-sa/3.0/.
+
+Formatting in VSLilyPond Plus uses a bundled, unmodified copy of [python-ly](https://github.com/frescobaldi/python-ly)
+0.9.7 (in `python-ly/`), under the GNU General Public License v2 or later; see `python-ly/COPYING`.
+It is run as a separate process. Changes in this fork are offered under the same license as VSLilyPond above.

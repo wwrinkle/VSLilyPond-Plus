@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.8.0 (VSLilyPond Plus fork)
+- Rename extension to `wwrinkle.vslilypond-plus`; commands and settings now use the `vslilypondPlus.` prefix
+- Add format on save with bundled python-ly 0.9.7 (`vslilypondPlus.formatting.*` settings); drop the LilyPond Formatter dependency
+- MIDI input uses English note names
+- Add `Toggle sharps/flats` (Ctrl+Alt+A) and `Start/stop MIDI input` (Ctrl+Alt+R) commands, plus a sharps/flats status bar item
+- Pass `-dno-print-pages` to the as-you-type check so LilyPond 2.26 doesn't write `-.pdf`
+
 ## 1.7.3
 - Add Restart MIDI Input command to allow restarting MIDI input when changing devices
 - Merge MIDI input bugfixes by [paradox460](https://github.com/paradox460)

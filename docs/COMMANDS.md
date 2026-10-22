@@ -50,6 +50,14 @@ Set workspace-folder specific MIDI input device for input. You can also change t
 
 Restart MIDI Input. Try this if the input stops working after changing your MIDI Input device/port.
 
+### VSLilyPond: MIDI Input: Start/stop MIDI input
+
+Start MIDI input if it is stopped, or stop it if it is running.
+
+### VSLilyPond: MIDI Input: Toggle sharps/flats
+
+Switch `vslilypondPlus.midiInput.accidentals` between sharps and flats. Restarts MIDI input if it is running so the change applies immediately.
+
 ## Compilation
 
 ### VSLilyPond: Compile

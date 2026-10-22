@@ -69,13 +69,13 @@ suite(`MIDIIn Test Suite`, () => {
         name: "10 sharp",
         accidentals: `sharps`,
         noteNum: 10,
-        want: `ais`,
+        want: `as`,
       },
       {
         name: "10 flat",
         accidentals: `flats`,
         noteNum: 10,
-        want: `bes`,
+        want: `bf`,
       },
     ]
 
@@ -218,14 +218,14 @@ suite(`MIDIIn Test Suite`, () => {
         note: 49,
         accidentals: `sharps`,
         relativeMode: false,
-        want: `cis`,
+        want: `cs`,
       },
       {
         name: "Normal (flat)",
         note: 49,
         accidentals: `flats`,
         relativeMode: false,
-        want: `des`,
+        want: `df`,
       },
       {
         name: "Normal (relative mode)",

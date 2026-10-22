@@ -1,11 +1,11 @@
 {
-  "name": "vslilypond",
-  "displayName": "VSLilyPond",
-  "publisher": "lhl2617",
+  "name": "vslilypond-plus",
+  "displayName": "VSLilyPond Plus",
+  "publisher": "wwrinkle",
   "license": "SEE LICENSE IN README.md",
-  "repository": "https://github.com/lhl2617/VSLilyPond",
-  "description": "Provides syntax and error highlighting, compilation on save, MIDI (input and playback) support for LilyPond in VSCode. ",
-  "version": "1.7.3",
+  "repository": "https://github.com/wwrinkle/VSLilyPond-Plus",
+  "description": "Fork of VSLilyPond: syntax and error highlighting, compilation on save, format on save (bundled python-ly), MIDI input (English note names) and playback for LilyPond in VSCode.",
+  "version": "1.8.0",
   "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.46.0"
@@ -22,187 +22,200 @@
   "extensionDependencies": [
     "jeandeaual.lilypond-syntax",
     "lhl2617.lilypond-snippets",
-    "lhl2617.lilypond-formatter",
     "lhl2617.lilypond-pdf-preview"
   ],
   "activationEvents": [
-    "onCommand:vslilypond.playMIDI",
-    "onCommand:vslilypond.playMIDIFrom",
-    "onCommand:vslilypond.stopMIDI",
-    "onCommand:vslilypond.pauseMIDI",
-    "onCommand:vslilypond.resumeMIDI",
-    "onCommand:vslilypond.resetMIDIOutput",
-    "onCommand:vslilypond.setOutputMIDIDevice",
-    "onCommand:vslilypond.startMIDIInput",
-    "onCommand:vslilypond.stopMIDIInput",
-    "onCommand:vslilypond.setInputMIDIDevice",
-    "onCommand:vslilypond.compile",
-    "onCommand:vslilypond.compileThisSpecificFile",
-    "onCommand:vslilypond.killCompilationProcess",
+    "onCommand:vslilypondPlus.playMIDI",
+    "onCommand:vslilypondPlus.playMIDIFrom",
+    "onCommand:vslilypondPlus.stopMIDI",
+    "onCommand:vslilypondPlus.pauseMIDI",
+    "onCommand:vslilypondPlus.resumeMIDI",
+    "onCommand:vslilypondPlus.resetMIDIOutput",
+    "onCommand:vslilypondPlus.setOutputMIDIDevice",
+    "onCommand:vslilypondPlus.startMIDIInput",
+    "onCommand:vslilypondPlus.stopMIDIInput",
+    "onCommand:vslilypondPlus.setInputMIDIDevice",
+    "onCommand:vslilypondPlus.compile",
+    "onCommand:vslilypondPlus.compileThisSpecificFile",
+    "onCommand:vslilypondPlus.killCompilationProcess",
+    "onCommand:vslilypondPlus.toggleMIDIInput",
+    "onCommand:vslilypondPlus.toggleMIDIInputAccidentals",
     "onLanguage:lilypond"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vslilypond.playMIDI",
+        "command": "vslilypondPlus.playMIDI",
         "title": "VSLilyPond: MIDI Playback: Play (from start)",
         "group": "MIDI Playback",
         "description": "Play MIDI from the start. You can also use the `Play MIDI` button on the left of the status bar. MIDI Playback device is set using `VSLilyPond: MIDI Playback: Set output device` command."
       },
       {
-        "command": "vslilypond.playMIDIFrom",
+        "command": "vslilypondPlus.playMIDIFrom",
         "title": "VSLilyPond: MIDI Playback: Play from...",
         "group": "MIDI Playback",
         "description": "Play MIDI from a user-input timestamp. You can also use the `Play MIDI from...` button on the left of the status bar."
       },
       {
-        "command": "vslilypond.stopMIDI",
+        "command": "vslilypondPlus.stopMIDI",
         "title": "VSLilyPond: MIDI Playback: Stop",
         "group": "MIDI Playback",
         "description": "Stop MIDI playback. You can also use the `Stop MIDI` button on the left of the status bar."
       },
       {
-        "command": "vslilypond.pauseMIDI",
+        "command": "vslilypondPlus.pauseMIDI",
         "title": "VSLilyPond: MIDI Playback: Pause",
         "group": "MIDI Playback",
         "description": "Pause MIDI playback. You can also use the `Pause MIDI` button on the left of the status bar."
       },
       {
-        "command": "vslilypond.resumeMIDI",
+        "command": "vslilypondPlus.resumeMIDI",
         "title": "VSLilyPond: MIDI Playback: Resume",
         "group": "MIDI Playback",
         "description": "Resume MIDI playback. You can also use the `Play MIDI` button on the left of the status bar."
       },
       {
-        "command": "vslilypond.resetMIDIOutput",
+        "command": "vslilypondPlus.resetMIDIOutput",
         "title": "VSLilyPond: MIDI Playback: Reset",
         "group": "MIDI Playback",
         "description": "Reset MIDI playback state."
       },
       {
-        "command": "vslilypond.setOutputMIDIDevice",
+        "command": "vslilypondPlus.setOutputMIDIDevice",
         "title": "VSLilyPond: MIDI Playback: Set output device",
         "group": "MIDI Playback",
         "description": "Set workspace-folder specific MIDI output device for playback. You can also change this manually (for more scopes) in settings under `Vslilypond › Midi Playback: Output`."
       },
       {
-        "command": "vslilypond.startMIDIInput",
+        "command": "vslilypondPlus.startMIDIInput",
         "title": "VSLilyPond: MIDI Input: Start MIDI input",
         "group": "MIDI Input",
         "description": "Start MIDI Input. You can also use the `Start MIDI Input` button on the right of the status bar. MIDI input device is set using `VSLilyPond: MIDI Playback: Set input device` command.`"
       },
       {
-        "command": "vslilypond.stopMIDIInput",
+        "command": "vslilypondPlus.stopMIDIInput",
         "title": "VSLilyPond: MIDI Input: Stop MIDI input",
         "group": "MIDI Input",
         "description": "Stop MIDI Input. You can also use the `Stop MIDI Input` button on the right of the status bar."
       },
       {
-        "command": "vslilypond.setInputMIDIDevice",
+        "command": "vslilypondPlus.setInputMIDIDevice",
         "title": "VSLilyPond: MIDI Input: Set input device",
         "group": "MIDI Input",
         "description": "Set workspace-folder specific MIDI input device for input. You can also change this manually (for more scopes) in settings under `Vslilypond › Midi Input: Input`."
       },
       {
-        "command": "vslilypond.restartMIDIInput",
+        "command": "vslilypondPlus.restartMIDIInput",
         "title": "VSLilyPond: MIDI Input: Restart MIDI Input",
         "group": "MIDI Input",
         "description": "Restart MIDI Input. Try this if the input stops working after changing your MIDI Input device/port."
       },
       {
-        "command": "vslilypond.compile",
+        "command": "vslilypondPlus.compile",
         "title": "VSLilyPond: Compile",
         "group": "Compilation",
         "description": "Compiles a main lilypond file (if specified in settings). Otherwise, compiles the currently active lilypond file. (Use `VSLilyPond: Compile this specific file` to compile the currently active file). See settings under `Vslilypond › Compilation` for additional settings."
       },
       {
-        "command": "vslilypond.compileThisSpecificFile",
+        "command": "vslilypondPlus.compileThisSpecificFile",
         "title": "VSLilyPond: Compile this specific file",
         "group": "Compilation",
         "description": "Compiles the currently active lilypond file. Use `VSLilyPond: Compile` to compile a main file if specified in settings."
       },
       {
-        "command": "vslilypond.killCompilationProcess",
+        "command": "vslilypondPlus.killCompilationProcess",
         "title": "VSLilyPond: Kill Compilation Process",
         "group": "Compilation",
         "description": "Kill the compilation process."
+      },
+      {
+        "command": "vslilypondPlus.toggleMIDIInput",
+        "title": "VSLilyPond: MIDI Input: Start/stop MIDI input",
+        "group": "MIDI Input",
+        "description": "Start MIDI input if it is stopped, or stop it if it is running."
+      },
+      {
+        "command": "vslilypondPlus.toggleMIDIInputAccidentals",
+        "title": "VSLilyPond: MIDI Input: Toggle sharps/flats",
+        "group": "MIDI Input",
+        "description": "Switch `vslilypondPlus.midiInput.accidentals` between sharps and flats. Restarts MIDI input if it is running so the change applies immediately."
       }
     ],
     "configuration": {
-      "title": "VSLilyPond",
+      "title": "VSLilyPond Plus",
       "properties": {
-        "vslilypond.general.pathToLilypond": {
+        "vslilypondPlus.general.pathToLilypond": {
           "type": "string",
           "default": "lilypond",
           "group": "General",
           "description": "Path to `lilypond` executable. Default (`lilypond`) assumes lilypond is in PATH variables. Reload required.",
           "scope": "resource"
         },
-        "vslilypond.intellisense.enabled": {
+        "vslilypondPlus.intellisense.enabled": {
           "type": "boolean",
           "default": true,
           "group": "Intellisense",
           "description": "Displays errors as you type. Disable to improve performance. Reload required.",
           "scope": "resource"
         },
-        "vslilypond.compilation.compileOnSave": {
+        "vslilypondPlus.compilation.compileOnSave": {
           "type": "boolean",
           "default": true,
           "group": "Compilation",
           "description": "Compiles file upon saving. Disable to improve performance. Reload required.",
           "scope": "resource"
         },
-        "vslilypond.compilation.compileMainFileOnSave": {
+        "vslilypondPlus.compilation.compileMainFileOnSave": {
           "type": "boolean",
           "default": true,
           "group": "Compilation",
           "description": "If true, compiles main file set in `Vslilypond › Compilation › Path To Main Compilation File`, else, compiles the currently active file.",
           "scope": "resource"
         },
-        "vslilypond.compilation.additionalCommandLineArguments": {
+        "vslilypondPlus.compilation.additionalCommandLineArguments": {
           "type": "string",
           "default": "",
           "group": "Compilation",
           "description": "Additional command line arguments supplied to `lilypond` upon compilation. Note that `--loglevel=WARNING` is predefined. Intellisense also uses these arguments.",
           "scope": "resource"
         },
-        "vslilypond.compilation.pathToMainCompilationFile": {
+        "vslilypondPlus.compilation.pathToMainCompilationFile": {
           "type": "string",
           "default": "",
           "group": "Compilation",
           "description": "Relative path (from workspace folder root) of the file to compile when a document in a folder/workspace is saved. If none specified, the current active file is compiled.",
           "scope": "resource"
         },
-        "vslilypond.midiPlayback.output": {
+        "vslilypondPlus.midiPlayback.output": {
           "type": "string",
           "default": "",
           "group": "MIDI Playback",
           "description": "MIDI Device used for output. If none specified, the first valid device is used. You can use the command `VSLilyPond: MIDI Playback: Set output device` to select a device from a list.",
           "scope": "resource"
         },
-        "vslilypond.midiInput.input": {
+        "vslilypondPlus.midiInput.input": {
           "type": "string",
           "default": "",
           "group": "MIDI Input",
           "description": "MIDI Device used for input. If none specified, the first valid device is used. After changing, please run the `VSLilyPond: MIDI Input: Restart MIDI Input` command. You can alternatively use the command `VSLilyPond: MIDI Input: Set output device` to select a device from a list.",
           "scope": "resource"
         },
-        "vslilypond.midiInput.chordMode": {
+        "vslilypondPlus.midiInput.chordMode": {
           "type": "boolean",
           "default": false,
           "group": "MIDI Input",
           "description": "Chord mode in music entry. Registers notes that are pressed and held together as a chord instead of sequential notes.",
           "scope": "resource"
         },
-        "vslilypond.midiInput.relativeMode": {
+        "vslilypondPlus.midiInput.relativeMode": {
           "type": "boolean",
           "default": false,
           "group": "MIDI Input",
           "description": "Relative mode (as opposed to absolute mode).",
           "scope": "resource"
         },
-        "vslilypond.midiInput.accidentals": {
+        "vslilypondPlus.midiInput.accidentals": {
           "type": "string",
           "default": "sharps",
           "enum": [
@@ -216,12 +229,47 @@
           "group": "MIDI Input",
           "description": "Set accidentals as sharps/flats.",
           "scope": "resource"
+        },
+        "vslilypondPlus.formatting.formatOnSave": {
+          "type": "boolean",
+          "default": true,
+          "group": "Formatting",
+          "description": "Reformat LilyPond files with python-ly (`ly reformat`) just before saving. The editor's current text is formatted, so unsaved edits are never lost. If formatting fails the file is saved unformatted.",
+          "scope": "resource"
+        },
+        "vslilypondPlus.formatting.pathToPython": {
+          "type": "string",
+          "default": "python3",
+          "group": "Formatting",
+          "description": "Path to the Python 3 executable used to run python-ly. Default (`python3`) assumes it is in PATH.",
+          "scope": "resource"
+        },
+        "vslilypondPlus.formatting.useBundledPythonLy": {
+          "type": "boolean",
+          "default": true,
+          "group": "Formatting",
+          "description": "Use the copy of python-ly bundled with this extension. Disable to use the python-ly installed for `vslilypondPlus.formatting.pathToPython`.",
+          "scope": "resource"
         }
       }
-    }
+    },
+    "keybindings": [
+      {
+        "command": "vslilypondPlus.toggleMIDIInput",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r",
+        "when": "editorLangId == lilypond"
+      },
+      {
+        "command": "vslilypondPlus.toggleMIDIInputAccidentals",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a",
+        "when": "editorLangId == lilypond"
+      }
+    ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run test && npm run docs:gen",
+    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "lint": "eslint src --ext ts",
     "watch": "tsc -watch -p ./",
