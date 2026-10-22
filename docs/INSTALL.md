@@ -32,7 +32,15 @@ LilyPond Manuals and Guides can be found on [lilypond.org](http://lilypond.org).
 
 See [here](https://marketplace.visualstudio.com/items?itemName=lhl2617.lilypond-formatter).
 
-## LilyPond PDF Preview Usage Guide
+## PDF Preview Usage Guide
 
-See [here](https://marketplace.visualstudio.com/items?itemName=lhl2617.lilypond-pdf-preview).
+The PDF preview is built into VSLilyPond Plus (it was the separate LilyPond PDF Preview extension).
+Open a `.pdf` to see it; compile with `-dpoint-and-click` so clicking a note jumps to its code. If
+another PDF viewer opens instead, add this to your settings:
+
+```json
+"workbench.editorAssociations": { "*.pdf": "vslilypondPlus.pdfPreview" }
+```
+
+See [the original extension](https://github.com/lhl2617/VSLilyPond-PDF-preview) for a usage guide.
 

@@ -11,8 +11,12 @@ import { MIDIOut } from "./midi-out"
 import { MIDIIn } from "./midi-in"
 import { langId } from "./consts"
 import { subscribeFormatOnSave } from "./format"
+import { registerPdfPreview } from "./pdf-preview"
 
 export function activate(context: vscode.ExtensionContext) {
+  // the PDF preview works without lilypond, so register it first
+  registerPdfPreview(context)
+
   // need to make sure `lilypond` exists
   if (!lilypondExists()) {
     vscode.window.showErrorMessage(

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "outDir": "../../../out/pdf-preview/webview",
+    "lib": ["dom", "DOM.Iterable"],
+    "inlineSourceMap": true
+  },
+  "include": ["."],
+  "files": ["../types.d.ts"]
+}

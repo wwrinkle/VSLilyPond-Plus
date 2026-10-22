@@ -48,6 +48,14 @@ Type: `string`
 
 Default value: N/A
 
+### vslilypondPlus.compilation.includePaths
+
+Extra folders for LilyPond's search path, passed as `-I <folder>` when compiling and checking for errors. Use this for include files or music fonts kept in the project. `${workspaceFolder}` is replaced with the project folder.
+
+Type: `array`
+
+Default value: N/A
+
 ### vslilypondPlus.compilation.pathToMainCompilationFile
 
 Relative path (from workspace folder root) of the file to compile when a document in a folder/workspace is saved. If none specified, the current active file is compiled.
@@ -108,6 +116,30 @@ Type: `string`
 
 Default value: `dutch`
 
+### vslilypondPlus.midiInput.monitor
+
+Play the notes you enter through a synth while MIDI input is running. Uses `vslilypondPlus.midiInput.monitorOutput`, then `vslilypondPlus.midiPlayback.output`, and otherwise the first FluidSynth or TiMidity port found.
+
+Type: `boolean`
+
+Default value: `false`
+
+### vslilypondPlus.midiInput.monitorOutput
+
+MIDI output device that MIDI input is played through when `vslilypondPlus.midiInput.monitor` is on. Matches the exact device name, or any device whose name contains this text (e.g. `Synth input port` for FluidSynth). If empty, `vslilypondPlus.midiPlayback.output` is used.
+
+Type: `string`
+
+Default value: N/A
+
+### vslilypondPlus.midiInput.monitorSynthCommand
+
+
+
+Type: `string`
+
+Default value: N/A
+
 ## Formatting
 
 ### vslilypondPlus.formatting.formatOnSave
@@ -133,3 +165,53 @@ Use the copy of python-ly bundled with this extension. Disable to use the python
 Type: `boolean`
 
 Default value: `true`
+
+## PDF Preview
+
+### vslilypondPlus.pdfPreview.general.cursor
+
+The default cursor tool for the PDF preview.
+
+Type: `string`
+
+Default value: `select`
+
+### vslilypondPlus.pdfPreview.general.scale
+
+The default zoom level for the PDF preview: `auto`, `page-actual`, `page-fit`, `page-width`, or a scale such as `1.0` (100%).
+
+Type: `string`
+
+Default value: `auto`
+
+### vslilypondPlus.pdfPreview.general.scrollMode
+
+The default scroll mode for the PDF preview.
+
+Type: `string`
+
+Default value: `vertical`
+
+### vslilypondPlus.pdfPreview.general.spreadMode
+
+The default spread mode for the PDF preview.
+
+Type: `string`
+
+Default value: `none`
+
+### vslilypondPlus.pdfPreview.pointAndClick.backgroundColor
+
+Highlight color (CSS) for the code a PDF click jumps to.
+
+Type: `string`
+
+Default value: `#FFA500`
+
+### vslilypondPlus.pdfPreview.pointAndClick.highlightDuration
+
+How long (ms) the code a PDF click jumps to stays highlighted.
+
+Type: `integer`
+
+Default value: `3000`

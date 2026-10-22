@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.11.0
+- Build in the LilyPond PDF Preview (from [lhl2617/VSLilyPond-PDF-preview](https://github.com/lhl2617/VSLilyPond-PDF-preview) 0.2.8, MIT);
+  drop the `lhl2617.lilypond-pdf-preview` dependency. Uninstall that extension: both claim `*.pdf`.
+  - Editor id `vslilypondPlus.pdfPreview`, command `vslilypondPlus.goToPDFLocationFromCursor`,
+    settings `vslilypondPlus.pdfPreview.*` (were `lilypond.pdf.preview` and `lilypond-pdf-preview.*`)
+  - Fix: the preview now refreshes after each compile with LilyPond 2.26, which replaces the PDF
+    (temp file + rename) instead of overwriting it
+
 ## 1.10.0
 - MIDI input monitor: hear what you enter through a synth while MIDI input is running
   (`vslilypondPlus.midiInput.monitor`, `monitorOutput`, `monitorSynthCommand`). Optionally starts

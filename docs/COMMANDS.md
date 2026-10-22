@@ -71,3 +71,9 @@ Compiles the currently active lilypond file. Use `VSLilyPond: Compile` to compil
 ### VSLilyPond: Kill Compilation Process
 
 Kill the compilation process.
+
+## PDF Preview
+
+### VSLilyPond: PDF Preview: Go to PDF location from cursor
+
+Show the note under the cursor in the open PDF preview (needs `-dpoint-and-click`).

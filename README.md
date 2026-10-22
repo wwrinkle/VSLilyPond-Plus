@@ -17,6 +17,10 @@ A fork of [VSLilyPond](https://github.com/lhl2617/VSLilyPond) by [lhl2617](https
   start and stop the synth itself, set `vslilypondPlus.midiInput.monitorSynthCommand`, e.g.
   `fluidsynth -is -a pulseaudio -m alsa_seq -z 64 -c 2 /usr/share/sounds/sf2/FluidR3_GM.sf2`.
 - **No stray `-.pdf` files.** The as-you-type error check no longer writes a PDF with LilyPond 2.26.
+- **PDF preview built in.** The [LilyPond PDF Preview](https://github.com/lhl2617/VSLilyPond-PDF-preview)
+  extension (two-way point-and-click) is now part of this one, and it refreshes after every compile
+  with LilyPond 2.26. Settings are under `vslilypondPlus.pdfPreview.*`; to make it the PDF viewer, set
+  `"workbench.editorAssociations": { "*.pdf": "vslilypondPlus.pdfPreview" }`.
 
 Commands and settings use the `vslilypondPlus.` prefix (instead of `vslilypond.`), so this fork and
 the original never clash.
@@ -29,7 +33,8 @@ Download the `.vsix` from the [latest release](https://github.com/wwrinkle/VSLil
 code --install-extension vslilypond-plus-<version>.vsix
 ```
 
-Uninstall the original VSLilyPond (`lhl2617.vslilypond`) first. To build it yourself:
+Uninstall the original VSLilyPond (`lhl2617.vslilypond`) and LilyPond PDF Preview
+(`lhl2617.lilypond-pdf-preview`) first. To build it yourself:
 `npm ci --legacy-peer-deps && npx vsce package`.
 
 ---
@@ -68,6 +73,7 @@ Supports chord mode, relative mode and sharp/flat accidentals. See [DEMOS.md](./
 ![Backward Point-and-Click](./docs/assets/gifs/point-and-click-backward.gif)
 
 See [here](https://github.com/lhl2617/VSLilyPond-PDF-preview) for more information (including a usage guide).
+In VSLilyPond Plus this preview is built in (MIT licensed, see `src/pdf-preview/LICENSE`).
 
 ## Requirements
 

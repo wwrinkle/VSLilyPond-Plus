@@ -4,8 +4,8 @@
   "publisher": "wwrinkle",
   "license": "SEE LICENSE IN README.md",
   "repository": "https://github.com/wwrinkle/VSLilyPond-Plus",
-  "description": "Fork of VSLilyPond: syntax and error highlighting, compilation on save, format on save (bundled python-ly), MIDI input (Dutch or English note names) and playback for LilyPond in VSCode.",
-  "version": "1.10.0",
+  "description": "Fork of VSLilyPond: syntax and error highlighting, compilation on save, format on save (bundled python-ly), MIDI input (Dutch or English note names) and playback, and a PDF preview with two-way point-and-click for LilyPond in VSCode.",
+  "version": "1.11.0",
   "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.46.0"
@@ -21,8 +21,7 @@
   ],
   "extensionDependencies": [
     "jeandeaual.lilypond-syntax",
-    "lhl2617.lilypond-snippets",
-    "lhl2617.lilypond-pdf-preview"
+    "lhl2617.lilypond-snippets"
   ],
   "activationEvents": [
     "onCommand:vslilypondPlus.playMIDI",
@@ -40,6 +39,8 @@
     "onCommand:vslilypondPlus.killCompilationProcess",
     "onCommand:vslilypondPlus.toggleMIDIInput",
     "onCommand:vslilypondPlus.toggleMIDIInputAccidentals",
+    "onCommand:vslilypondPlus.goToPDFLocationFromCursor",
+    "onCustomEditor:vslilypondPlus.pdfPreview",
     "onLanguage:lilypond"
   ],
   "main": "./out/extension.js",
@@ -140,6 +141,12 @@
         "title": "VSLilyPond: MIDI Input: Toggle sharps/flats",
         "group": "MIDI Input",
         "description": "Switch `vslilypondPlus.midiInput.accidentals` between sharps and flats. Restarts MIDI input if it is running so the change applies immediately."
+      },
+      {
+        "command": "vslilypondPlus.goToPDFLocationFromCursor",
+        "title": "VSLilyPond: PDF Preview: Go to PDF location from cursor",
+        "group": "PDF Preview",
+        "description": "Show the note under the cursor in the open PDF preview (needs `-dpoint-and-click`)."
       }
     ],
     "configuration": {
@@ -296,6 +303,57 @@
           "group": "Formatting",
           "description": "Use the copy of python-ly bundled with this extension. Disable to use the python-ly installed for `vslilypondPlus.formatting.pathToPython`.",
           "scope": "resource"
+        },
+        "vslilypondPlus.pdfPreview.general.cursor": {
+          "type": "string",
+          "default": "select",
+          "enum": [
+            "select",
+            "hand"
+          ],
+          "group": "PDF Preview",
+          "description": "The default cursor tool for the PDF preview."
+        },
+        "vslilypondPlus.pdfPreview.general.scale": {
+          "type": "string",
+          "default": "auto",
+          "pattern": "^(\\d+(?:\\.\\d+)?|auto|page-actual|page-fit|page-width)$",
+          "group": "PDF Preview",
+          "description": "The default zoom level for the PDF preview: `auto`, `page-actual`, `page-fit`, `page-width`, or a scale such as `1.0` (100%)."
+        },
+        "vslilypondPlus.pdfPreview.general.scrollMode": {
+          "type": "string",
+          "default": "vertical",
+          "enum": [
+            "vertical",
+            "horizontal",
+            "wrapped"
+          ],
+          "group": "PDF Preview",
+          "description": "The default scroll mode for the PDF preview."
+        },
+        "vslilypondPlus.pdfPreview.general.spreadMode": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "odd",
+            "even"
+          ],
+          "group": "PDF Preview",
+          "description": "The default spread mode for the PDF preview."
+        },
+        "vslilypondPlus.pdfPreview.pointAndClick.backgroundColor": {
+          "type": "string",
+          "default": "#FFA500",
+          "group": "PDF Preview",
+          "description": "Highlight color (CSS) for the code a PDF click jumps to."
+        },
+        "vslilypondPlus.pdfPreview.pointAndClick.highlightDuration": {
+          "type": "integer",
+          "default": 3000,
+          "group": "PDF Preview",
+          "description": "How long (ms) the code a PDF click jumps to stays highlighted."
         }
       }
     },
@@ -312,17 +370,29 @@
         "mac": "cmd+alt+a",
         "when": "editorLangId == lilypond"
       }
+    ],
+    "customEditors": [
+      {
+        "viewType": "vslilypondPlus.pdfPreview",
+        "displayName": "LilyPond PDF Preview (VSLilyPond Plus)",
+        "selector": [
+          {
+            "filenamePattern": "*.pdf"
+          }
+        ]
+      }
     ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
+    "compile": "node scripts/build-pdf-preview.js && tsc -p ./ && tsc -p src/pdf-preview/webview",
     "lint": "eslint src --ext ts",
-    "watch": "tsc -watch -p ./",
+    "watch": "node scripts/build-pdf-preview.js && tsc -p src/pdf-preview/webview && tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "test": "node ./out/test/runTest.js",
     "docs:gen": "ts-node ./src/docs-gen/main.ts",
-    "package": "vsce package"
+    "package": "vsce package",
+    "postinstall": "node scripts/build-pdf-preview.js"
   },
   "devDependencies": {
     "@types/command-exists": "^1.2.0",
@@ -347,6 +417,7 @@
     "command-exists": "^1.2.9",
     "file-type": "^16.5.3",
     "jzz": "^1.4.0",
-    "jzz-midi-smf": "1.5.0"
+    "jzz-midi-smf": "1.5.0",
+    "pdfjs-dist-viewer-min": "2.4.456"
   }
 }
