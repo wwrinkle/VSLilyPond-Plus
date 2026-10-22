@@ -69,13 +69,13 @@ suite(`MIDIIn Test Suite`, () => {
         name: "10 sharp",
         accidentals: `sharps`,
         noteNum: 10,
-        want: `as`,
+        want: `ais`,
       },
       {
         name: "10 flat",
         accidentals: `flats`,
         noteNum: 10,
-        want: `bf`,
+        want: `bes`,
       },
     ]
 
@@ -93,6 +93,37 @@ suite(`MIDIIn Test Suite`, () => {
         assert.strictEqual(got, want)
       })
     }
+
+    // every black key, in both languages
+    const blackKeys: [number, string, string, string, string][] = [
+      // noteNum, dutch sharp, dutch flat, english sharp, english flat
+      [1, `cis`, `des`, `cs`, `df`],
+      [3, `dis`, `ees`, `ds`, `ef`],
+      [6, `fis`, `ges`, `fs`, `gf`],
+      [8, `gis`, `aes`, `gs`, `af`],
+      [10, `ais`, `bes`, `as`, `bf`],
+    ]
+    for (const [noteNum, ds, df, es, ef] of blackKeys) {
+      test(`${noteNum} in Dutch and English`, () => {
+        assert.strictEqual(MIDIIn.getNoteChar(`sharps`, noteNum, `dutch`), ds)
+        assert.strictEqual(MIDIIn.getNoteChar(`flats`, noteNum, `dutch`), df)
+        assert.strictEqual(MIDIIn.getNoteChar(`sharps`, noteNum, `english`), es)
+        assert.strictEqual(MIDIIn.getNoteChar(`flats`, noteNum, `english`), ef)
+      })
+    }
+    test(`White keys are the same in English`, () => {
+      assert.strictEqual(MIDIIn.getNoteChar(`flats`, 0, `english`), `c`)
+      assert.strictEqual(MIDIIn.getNoteChar(`sharps`, 11, `english`), `b`)
+    })
+    test(`English chord via notesToString`, () => {
+      const got = MIDIIn.notesToString(
+        new Set([61, 70]),
+        `flats`,
+        true,
+        `english`
+      )
+      assert.strictEqual(got, ` <df bf>`)
+    })
   })
 
   suite(`getAbsoluteOctavePostfix suite`, () => {
@@ -218,14 +249,14 @@ suite(`MIDIIn Test Suite`, () => {
         note: 49,
         accidentals: `sharps`,
         relativeMode: false,
-        want: `cs`,
+        want: `cis`,
       },
       {
         name: "Normal (flat)",
         note: 49,
         accidentals: `flats`,
         relativeMode: false,
-        want: `df`,
+        want: `des`,
       },
       {
         name: "Normal (relative mode)",
@@ -315,6 +346,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: false,
+          noteNames: `dutch`,
         },
         want: ``,
         wantActiveNotes: new Set([48]),
@@ -330,6 +362,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: false,
+          noteNames: `dutch`,
         },
         want: `48`,
         wantActiveNotes: new Set(),
@@ -351,6 +384,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: false,
+          noteNames: `dutch`,
         },
         want: `48485048`,
         wantActiveNotes: new Set(),
@@ -367,6 +401,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: false,
+          noteNames: `dutch`,
         },
         want: `4850`,
         wantActiveNotes: new Set([48]),
@@ -383,6 +418,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: false,
+          noteNames: `dutch`,
         },
         want: `4850`,
         wantActiveNotes: new Set([52]),
@@ -402,6 +438,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: false,
+          noteNames: `dutch`,
         },
         want: `485052`,
         wantActiveNotes: new Set(),
@@ -414,6 +451,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: true,
+          noteNames: `dutch`,
         },
         want: ``,
         wantActiveNotes: new Set([48]),
@@ -429,6 +467,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: true,
+          noteNames: `dutch`,
         },
         want: `48`,
         wantActiveNotes: new Set(),
@@ -450,6 +489,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: true,
+          noteNames: `dutch`,
         },
         want: `48485048`,
         wantActiveNotes: new Set(),
@@ -467,6 +507,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: true,
+          noteNames: `dutch`,
         },
         want: ``,
         wantActiveNotes: new Set([48, 50]),
@@ -483,6 +524,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: true,
+          noteNames: `dutch`,
         },
         want: ``,
         wantActiveNotes: new Set([48, 50, 52]),
@@ -502,6 +544,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: true,
+          noteNames: `dutch`,
         },
         want: `485052`,
         wantActiveNotes: new Set(),
@@ -520,6 +563,7 @@ suite(`MIDIIn Test Suite`, () => {
           accidentals: `sharps`,
           relativeMode: true,
           chordMode: true,
+          noteNames: `dutch`,
         },
         want: ``,
         wantActiveNotes: new Set([52]),

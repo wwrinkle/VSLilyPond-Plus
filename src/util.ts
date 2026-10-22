@@ -13,6 +13,8 @@ export enum LogLevel {
 
 export type Accidentals = `sharps` | `flats`
 
+export type NoteNames = `dutch` | `english`
+
 export const getBinPath = () => {
   const config = getConfiguration()
   return config.general.pathToLilypond

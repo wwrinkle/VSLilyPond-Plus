@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.9.0
+- MIDI input note names are now a setting: `vslilypondPlus.midiInput.noteNames` (`dutch` by default, or `english`)
+
 ## 1.8.0 (VSLilyPond Plus fork)
 - Rename extension to `wwrinkle.vslilypond-plus`; commands and settings now use the `vslilypondPlus.` prefix
 - Add format on save with bundled python-ly 0.9.7 (`vslilypondPlus.formatting.*` settings); drop the LilyPond Formatter dependency

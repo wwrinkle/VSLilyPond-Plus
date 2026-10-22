@@ -6,7 +6,8 @@ A fork of [VSLilyPond](https://github.com/lhl2617/VSLilyPond) by [lhl2617](https
 - **Format on save, built in.** The editor's current text is reformatted with python-ly before it is
   saved, so unsaved edits are never lost. python-ly is bundled (needs only `python3`); the separate
   LilyPond Formatter extension is no longer required.
-- **English note names for MIDI input** (`cs`, `bf`, ...) for files using `\language "english"`.
+- **English note names for MIDI input** (`cs`, `bf`, ...), for files using `\language "english"`.
+  Dutch (`cis`, `bes`) stays the default; set `"vslilypondPlus.midiInput.noteNames": "english"` to switch.
 - **Toggle sharps/flats** with `Ctrl+Alt+A` or by clicking the new ♭/♯ status bar item. MIDI input
   restarts automatically so the change applies to the next note.
 - **Start/stop MIDI input** with `Ctrl+Alt+R`.

@@ -1,5 +1,11 @@
 import * as vscode from "vscode"
-import { logger, LogLevel, getConfiguration, Accidentals } from "./util"
+import {
+  logger,
+  LogLevel,
+  getConfiguration,
+  Accidentals,
+  NoteNames,
+} from "./util"
 import * as JZZ from "jzz"
 // no types for jzz-midi-smf
 // @ts-ignore
@@ -17,6 +23,7 @@ export namespace MIDIIn {
     accidentals: Accidentals
     relativeMode: boolean
     chordMode: boolean
+    noteNames: NoteNames
   }
 
   const initialMidiInState: MIDIInStateType = {
@@ -38,12 +45,13 @@ export namespace MIDIIn {
   const getMIDIInputConfig = (): MIDIInputConfig => {
     const config = getConfiguration()
 
-    const { accidentals, relativeMode, chordMode } = config.midiInput
+    const { accidentals, relativeMode, chordMode, noteNames } = config.midiInput
 
     return {
       accidentals: accidentals,
       relativeMode: relativeMode,
       chordMode: chordMode,
+      noteNames: noteNames === `english` ? `english` : `dutch`,
     }
   }
 
@@ -61,24 +69,28 @@ export namespace MIDIIn {
   }
 
   // maps midi numbers from 0-11 to the name based on the sharps/flat mode
-  // (English note names, for files using \language "english")
+  // and note-name language (Dutch `cis`/`bes`, or English `cs`/`bf` for
+  // files using \language "english")
   export const getNoteChar = (
     accidentals: Accidentals,
-    noteNum: number
+    noteNum: number,
+    noteNames: NoteNames = `dutch`
   ): string => {
     const isSharp = accidentals === `sharps`
+    const [sharp, flat] = noteNames === `english` ? [`s`, `f`] : [`is`, `es`]
+    // Dutch spells E-flat and A-flat as `ees`/`aes` (not the `es`/`as` shorthands)
     const map: Record<number, string> = {
       0: `c`,
-      1: isSharp ? `cs` : `df`,
+      1: isSharp ? `c${sharp}` : `d${flat}`,
       2: `d`,
-      3: isSharp ? `ds` : `ef`,
+      3: isSharp ? `d${sharp}` : `e${flat}`,
       4: `e`,
       5: `f`,
-      6: isSharp ? `fs` : `gf`,
+      6: isSharp ? `f${sharp}` : `g${flat}`,
       7: `g`,
-      8: isSharp ? `gs` : `af`,
+      8: isSharp ? `g${sharp}` : `a${flat}`,
       9: `a`,
-      10: isSharp ? `as` : `bf`,
+      10: isSharp ? `a${sharp}` : `b${flat}`,
       11: `b`,
     }
 
@@ -93,7 +105,8 @@ export namespace MIDIIn {
   export const midiNumberToNoteName = (
     note: number,
     accidentals: Accidentals,
-    relativeMode: boolean
+    relativeMode: boolean,
+    noteNames: NoteNames = `dutch`
   ): string => {
     if (!Number.isInteger(note) || note < 12 || note > 127) {
       throw new Error(
@@ -107,7 +120,7 @@ export namespace MIDIIn {
     const noteNum = note % 12
 
     const fullNoteStr =
-      getNoteChar(accidentals, noteNum) +
+      getNoteChar(accidentals, noteNum, noteNames) +
       (relativeMode ? `` : getAbsoluteOctavePostfix(octaveNum))
     return fullNoteStr
   }
@@ -115,13 +128,20 @@ export namespace MIDIIn {
   export const notesToString = (
     notes: Set<number>,
     accidentals: Accidentals,
-    relativeMode: boolean
+    relativeMode: boolean,
+    noteNames: NoteNames = `dutch`
   ): string => {
     try {
       if (notes.size === 1) {
         // one note
         return (
-          ` ` + midiNumberToNoteName([...notes][0], accidentals, relativeMode)
+          ` ` +
+          midiNumberToNoteName(
+            [...notes][0],
+            accidentals,
+            relativeMode,
+            noteNames
+          )
         )
       } else if (notes.size > 1) {
         // chord
@@ -130,7 +150,7 @@ export namespace MIDIIn {
           [...notes]
             .sort()
             .map((note) =>
-              midiNumberToNoteName(note, accidentals, relativeMode)
+              midiNumberToNoteName(note, accidentals, relativeMode, noteNames)
             )
             .join(` `) +
           `>`
@@ -154,7 +174,12 @@ export namespace MIDIIn {
     accidentals: Accidentals,
     relativeMode: boolean
   ) => {
-    const outputString = notesToString(notes, accidentals, relativeMode)
+    const outputString = notesToString(
+      notes,
+      accidentals,
+      relativeMode,
+      getMIDIInputConfig().noteNames
+    )
     if (outputString.length) {
       try {
         const activeTextEditor = vscode.window.activeTextEditor

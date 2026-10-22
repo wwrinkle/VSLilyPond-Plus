@@ -100,6 +100,14 @@ Type: `string`
 
 Default value: `sharps`
 
+### vslilypondPlus.midiInput.noteNames
+
+Note-name language used when MIDI input types notes.
+
+Type: `string`
+
+Default value: `dutch`
+
 ## Formatting
 
 ### vslilypondPlus.formatting.formatOnSave

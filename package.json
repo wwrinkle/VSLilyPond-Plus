@@ -4,8 +4,8 @@
   "publisher": "wwrinkle",
   "license": "SEE LICENSE IN README.md",
   "repository": "https://github.com/wwrinkle/VSLilyPond-Plus",
-  "description": "Fork of VSLilyPond: syntax and error highlighting, compilation on save, format on save (bundled python-ly), MIDI input (English note names) and playback for LilyPond in VSCode.",
-  "version": "1.8.0",
+  "description": "Fork of VSLilyPond: syntax and error highlighting, compilation on save, format on save (bundled python-ly), MIDI input (Dutch or English note names) and playback for LilyPond in VSCode.",
+  "version": "1.9.0",
   "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.46.0"
@@ -228,6 +228,21 @@
           ],
           "group": "MIDI Input",
           "description": "Set accidentals as sharps/flats.",
+          "scope": "resource"
+        },
+        "vslilypondPlus.midiInput.noteNames": {
+          "type": "string",
+          "default": "dutch",
+          "enum": [
+            "dutch",
+            "english"
+          ],
+          "enumDescriptions": [
+            "Dutch note names (`cis`, `bes`): LilyPond's default input language.",
+            "English note names (`cs`, `bf`), for files using `\\language \"english\"`."
+          ],
+          "group": "MIDI Input",
+          "description": "Note-name language used when MIDI input types notes.",
           "scope": "resource"
         },
         "vslilypondPlus.formatting.formatOnSave": {
