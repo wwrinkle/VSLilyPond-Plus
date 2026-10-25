@@ -99,6 +99,10 @@ export class PdfPreview extends Disposable {
     this.webviewEditor.webview.postMessage(msg)
   }
 
+  public get visible(): boolean {
+    return this.webviewEditor.visible
+  }
+
   public async revealWebview() {
     this.webviewEditor.reveal()
   }

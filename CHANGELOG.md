@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.11.1
+- Fix "Go to PDF location from cursor" when a .ly file makes several PDFs: it only jumps to a PDF
+  that's open (preferring a visible one), and a closed preview's links are forgotten.
+- It now also works with the cursor before the first note on a line, and its errors say what to do.
+
 ## 1.11.0
 - Build in the LilyPond PDF Preview (from [lhl2617/VSLilyPond-PDF-preview](https://github.com/lhl2617/VSLilyPond-PDF-preview) 0.2.8, MIT);
   drop the `lhl2617.lilypond-pdf-preview` dependency. Uninstall that extension: both claim `*.pdf`.

@@ -45,6 +45,14 @@ export class PdfCustomProvider implements vscode.CustomReadonlyEditorProvider {
 
     webviewEditor.onDidDispose(() => {
       this._previews.delete(preview)
+      // Forget this PDF's links unless another preview still shows it,
+      // so the cursor command never targets a closed PDF.
+      const stillOpen = [...this._previews].some(
+        (p) => p.fsPath === preview.fsPath
+      )
+      if (!stillOpen) {
+        this._goToPDFLocationHandler.clearLinksForPdf(preview.fsPath)
+      }
     })
 
     webviewEditor.onDidChangeViewState(() => {
@@ -85,8 +93,18 @@ export class PdfCustomProvider implements vscode.CustomReadonlyEditorProvider {
   }
 
   public async goToPDFLocationFromCursor() {
+    const previews = [...this._previews]
+    const pdfRank = (pdfFsPath: string) => {
+      const mine = previews.filter((p) => p.fsPath === pdfFsPath)
+      if (mine.length === 0) {
+        return undefined
+      }
+      return mine.some((p) => p.visible) ? 0 : 1
+    }
     const { elementID, pdfFsPath } =
-      await this._goToPDFLocationHandler.getPDFPathAndElementIDFromCursor()
+      await this._goToPDFLocationHandler.getPDFPathAndElementIDFromCursor(
+        pdfRank
+      )
     await this.goToPDFLocation(pdfFsPath, elementID)
   }
 }

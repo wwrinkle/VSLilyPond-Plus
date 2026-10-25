@@ -91,36 +91,48 @@ export class GoToPDFLocationHandler {
     }
   }
 
-  public getPDFPathAndElementIDFromCursor = async () => {
+  /**
+   * @param pdfRank how much to prefer a PDF: undefined if it has no open
+   * preview (skip it), otherwise lower is better (e.g. 0 = visible).
+   */
+  public getPDFPathAndElementIDFromCursor = async (
+    pdfRank: (pdfFsPath: string) => number | undefined
+  ) => {
     const cursorInfo = this._getCursorInfo()
     const { fsPath, line } = cursorInfo
     const cursorCol = cursorInfo.col
-    if (fsPath in this._linkRepository) {
-      const fsPathLinkRepo = this._linkRepository[fsPath]
-      if (line in fsPathLinkRepo) {
-        const lineLinkRepo = fsPathLinkRepo[line]
-        // Find the closest element after col
-        let delta = Number.MAX_SAFE_INTEGER
-        let candidate:
-          | {
-              pdfFsPath: string
-              elementID: string
-            }
-          | undefined
-        for (const { col, elementID, pdfFsPath } of lineLinkRepo) {
-          if (cursorCol >= col && cursorCol - col < delta) {
-            delta = cursorCol - col
-            candidate = {
-              pdfFsPath,
-              elementID,
-            }
-          }
-        }
-        if (candidate) {
-          return candidate
-        }
+    const lineLinks = this._linkRepository[fsPath]?.[line] ?? []
+    if (!Object.values(this._linkRepository[fsPath] ?? {}).some((l) => l.length)) {
+      throw new Error(
+        "No open PDF preview has links to this file. Open the PDF (or click its tab so it loads) and try again."
+      )
+    }
+    // Best match: open PDF with the lowest rank, then the closest element
+    // at or before the cursor, else the closest one after it.
+    let best:
+      | { pdfFsPath: string; elementID: string; score: [number, number] }
+      | undefined
+    for (const { col, elementID, pdfFsPath } of lineLinks) {
+      const rank = pdfRank(pdfFsPath)
+      if (rank === undefined) {
+        continue
+      }
+      const distance =
+        cursorCol >= col ? cursorCol - col : 1_000_000 + (col - cursorCol)
+      const score: [number, number] = [rank, distance]
+      if (
+        !best ||
+        score[0] < best.score[0] ||
+        (score[0] === best.score[0] && score[1] < best.score[1])
+      ) {
+        best = { pdfFsPath, elementID, score }
       }
     }
-    throw new Error("No valid PDF location can be found from the cursor")
+    if (best) {
+      return { pdfFsPath: best.pdfFsPath, elementID: best.elementID }
+    }
+    throw new Error(
+      "Nothing on this line links to an open PDF preview. Put the cursor on a note, chord or other printed item."
+    )
   }
 }
