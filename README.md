@@ -25,6 +25,13 @@ A fork of [VSLilyPond](https://github.com/lhl2617/VSLilyPond) by [lhl2617](https
 Commands and settings use the `vslilypondPlus.` prefix (instead of `vslilypond.`), so this fork and
 the original never clash.
 
+Two features come from companion extensions that VS Code installs automatically with this one:
+syntax highlighting from [LilyPond Syntax](https://marketplace.visualstudio.com/items?itemName=jeandeaual.lilypond-syntax)
+(`jeandeaual.lilypond-syntax`), and autocomplete of LilyPond commands and keywords from
+[LilyPond AutoComplete](https://marketplace.visualstudio.com/items?itemName=lhl2617.lilypond-snippets)
+(`lhl2617.lilypond-snippets`). The autocomplete is a fixed list: it does not suggest your own
+variables. "IntelliSense" in this extension means the as-you-type error check.
+
 ### Install
 
 Download the `.vsix` from the [latest release](https://github.com/wwrinkle/VSLilyPond-Plus/releases/latest), then:
@@ -41,7 +48,7 @@ Uninstall the original VSLilyPond (`lhl2617.vslilypond`) and LilyPond PDF Previe
 
 *Original README follows.*
 
-Provides syntax and error highlighting, IntelliSense and AutoComplete, compilation on save, MIDI (input and playback) support for [LilyPond](http://lilypond.org/) in VSCode. Works with any VSCode supported PDF previewer for PDF preview.
+Provides error highlighting as you type ("IntelliSense"), compilation on save, MIDI (input and playback) support and a PDF preview for [LilyPond](http://lilypond.org/) in VSCode. Syntax highlighting and command autocomplete come from the companion extensions installed with it (see Acknowledgements).
 
 See [docs/INSTALL.md](docs/INSTALL.md) for a setup guide.
 
@@ -51,6 +58,8 @@ See [docs/INSTALL.md](docs/INSTALL.md) for a setup guide.
 ![Error highlighting](./docs/assets/gifs/syntaxHighlighting.gif)
 
 ### IntelliSense and AutoComplete 💡
+Errors as you type come from this extension; command and keyword completion from the companion LilyPond AutoComplete extension.
+
 ![IntelliSense and AutoComplete](./docs/assets/gifs/intellisense.gif)
 
 ### Compilation on save 💾
@@ -82,7 +91,7 @@ See [docs/INSTALL.md](docs/INSTALL.md) for a setup guide.
 * [VSCode](https://code.visualstudio.com/) 1.46.0 minimum
 * [LilyPond](http://lilypond.org/) (Tested on 2.22.1)
 * (Optional) MIDI Devices for MIDI Input and Playback
-* (Optional for Windows, Linux and macOS users) [python-ly](https://pypi.org/project/python-ly/): Required for formatting (more information [here](https://marketplace.visualstudio.com/items?itemName=lhl2617.lilypond-formatter))
+* `python3` for formatting ([python-ly](https://pypi.org/project/python-ly/) is bundled)
 
 ## Extension Controls, Commands and Settings
 
