@@ -163,8 +163,7 @@ const execIntellisense = async (
     // it is possible to set output to filePath, but then the --include gets broken...
     const intellisenseArgs = [
       `--loglevel=WARNING`, // Output errors and warnings
-      `--define-default=backend=null`, // to not output printed score
-      `-dno-print-pages`, // LilyPond 2.26 still writes -.pdf with backend=null alone
+      `-dno-print-pages`, // to not output printed score
       `-dmidi-extension=tmp`, // show midi output as -.tmp
       `-`, // read input from stdin
     ]

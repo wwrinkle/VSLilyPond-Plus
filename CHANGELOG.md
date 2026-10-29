@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.11.2
+- As-you-type checking no longer passes `-dbackend=null`, which LilyPond 2.26 rejects with a
+  warning on every check (`-dno-print-pages` already stops the PDF).
+
 ## 1.11.1
 - Fix "Go to PDF location from cursor" when a .ly file makes several PDFs: it only jumps to a PDF
   that's open (preferring a visible one), and a closed preview's links are forgotten.
